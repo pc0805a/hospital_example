@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="servicedesc">servicedesc</string>
+    <string name="aiddescription">aiddescription</string>
+
+    <string name="app_name">hospital</string>
+    <string name="m_btn_1_txt">掛號</string>
+    <string name="m_btn_2_txt">NFC報到</string>
+    <string name="m_btn_3_txt">地圖</string>
+    <string name="input_title">Input</string>
+
+</resources>
