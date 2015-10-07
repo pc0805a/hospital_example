@@ -111,6 +111,19 @@
                 android:textSize="20sp" />
         </LinearLayout>
 
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/m_dlist_spinner"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="獲取我的看診資訊"
+            android:id="@+id/f_Dlist_btn"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 
 </RelativeLayout>

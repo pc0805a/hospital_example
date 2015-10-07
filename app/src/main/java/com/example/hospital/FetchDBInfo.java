@@ -32,10 +32,9 @@ public class FetchDBInfo extends AsyncTask<String,Void,String> {
     private Context context;
     private int byGetOrPost = 0;
 
-    //flag 0 means get and 1 means post.(By default it is get.)
-    public FetchDBInfo(Context context, int flag) {
-        this.context = context;
-        byGetOrPost = flag;
+
+    public FetchDBInfo() {
+
     }
 
     protected void onPreExecute() {

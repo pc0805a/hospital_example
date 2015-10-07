@@ -25,7 +25,11 @@ public class NFCReportActivity extends Activity {
     private TextView imei_txt;
     private TextView lastUpdate_txt;
 
+    private boolean hasLocalData=false;
+
+    String mid;
     String imei;
+    String lastUpdate;
 
     private void initViews() {
         confirm_btn = (Button) findViewById(R.id.confirm_btn);
@@ -68,6 +72,10 @@ public class NFCReportActivity extends Activity {
         setListeners();
         setAdapter();
         getMemberInfo();
+        if(hasLocalData)
+        {
+            new FetchDBInfo().execute(mid, imei);
+        }
     }
 
     @Override
@@ -106,13 +114,14 @@ public class NFCReportActivity extends Activity {
         Cursor cursor = meberInfo.getAll();
         int row_num = cursor.getCount();
         if (row_num != 0) {
+            hasLocalData = true;
             cursor.moveToFirst();
 
             long rowid = cursor.getLong(0);
 
-            String mid = cursor.getString(1);
-            String imei = cursor.getString(2);
-            String lastUpdate = cursor.getString(3);
+            mid = cursor.getString(1);
+            imei = cursor.getString(2);
+            lastUpdate = cursor.getString(3);
 
             Log.v(TAG, "ROWID: " +rowid);
             Log.v(TAG, "MID: " + mid);
