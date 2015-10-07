@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import de.grundid.hcedemo.R;
-
-
 public class MainActivity extends Activity {
 
 	private static final String TAG = MainActivity.class.getSimpleName();

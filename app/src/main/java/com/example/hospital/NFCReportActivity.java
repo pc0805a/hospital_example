@@ -14,7 +14,6 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.grundid.hcedemo.R;
 
 public class NFCReportActivity extends Activity {
     private static final String TAG = NFCReportActivity.class.getSimpleName();
@@ -52,9 +51,9 @@ public class NFCReportActivity extends Activity {
             String currentDateandTime = sdf.format(new Date());
 
             TelephonyManager mTelManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-            //String imei = mTelManager.getDeviceId(); //get imei
+            imei = mTelManager.getDeviceId(); //get imei
 
-            String[] info = {mid_input_txt.getText().toString(), mTelManager.getDeviceId(), currentDateandTime};
+            String[] info = {mid_input_txt.getText().toString(), imei, currentDateandTime};
 
             Log.v(TAG, "Current Time: " + currentDateandTime);
 
@@ -74,7 +73,7 @@ public class NFCReportActivity extends Activity {
         getMemberInfo();
         if(hasLocalData)
         {
-            new FetchDBInfo().execute(mid, imei);
+            new FetchDBInfo(mid, imei).getInfo();
         }
     }
 

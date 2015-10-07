@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.grundid.hcedemo.test">
+    package="com.example.hospital.test">
 
     <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
 
@@ -9,8 +9,8 @@
     </application>
 
     <instrumentation android:name="android.test.InstrumentationTestRunner"
-                     android:targetPackage="de.grundid.hcedemo"
+                     android:targetPackage="com.example.hospital"
                      android:handleProfiling="false"
                      android:functionalTest="false"
-                     android:label="Tests for de.grundid.hcedemo"/>
+                     android:label="Tests for com.example.hospital"/>
 </manifest>

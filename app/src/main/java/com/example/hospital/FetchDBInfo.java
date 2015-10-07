@@ -1,12 +1,11 @@
 package com.example.hospital;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.TextView;
+import android.content.ContentValues;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import android.util.Log;
+
+
+
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -19,33 +18,28 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by User on 2015/10/7.
  */
-public class FetchDBInfo extends AsyncTask<String,Void,String> {
+public class FetchDBInfo {
     private static final String TAG = FetchDBInfo.class.getSimpleName();
 
     private String addr = "140.136.150.92";
-    private Context context;
-    private int byGetOrPost = 0;
+    private String id;
+    private String imei;
 
-
-    public FetchDBInfo() {
-
+    //flag 0 means get and 1 means post.(By default it is get.)
+    public FetchDBInfo(String id ,String imei) {
+        this.id = id;
+        this.imei = imei;
     }
 
-    protected void onPreExecute() {
+    public String getInfo () {
 
-    }
-
-
-    @Override
-    protected String doInBackground(String... args) {
-        String id = (String) args[0];
-        String imei = (String) args[1];
         try {
 
             String link = "http://" + addr + "/fetchDBInfo.php";
@@ -58,9 +52,9 @@ public class FetchDBInfo extends AsyncTask<String,Void,String> {
             conn.setDoInput(true);
             conn.setDoOutput(true);
 
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("id", id));
-            params.add(new BasicNameValuePair("imei", imei));
+            ContentValues params = new ContentValues();
+            params.put("id", id);
+            params.put("imei", imei);
 
             OutputStream os = conn.getOutputStream();
             BufferedWriter writer = new BufferedWriter(
@@ -69,6 +63,8 @@ public class FetchDBInfo extends AsyncTask<String,Void,String> {
             writer.flush();
             writer.close();
             os.close();
+
+            Log.v(TAG, "result: testst");
 
             conn.connect();
         } catch (MalformedURLException e) {
@@ -82,25 +78,25 @@ public class FetchDBInfo extends AsyncTask<String,Void,String> {
         return "";
     }
 
-    private String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException
+    private String getQuery(ContentValues params) throws UnsupportedEncodingException
     {
         StringBuilder result = new StringBuilder();
         boolean first = true;
 
-        for (NameValuePair pair : params)
+        for (Map.Entry<String, Object> entry : params.valueSet())
         {
             if (first)
                 first = false;
             else
                 result.append("&");
 
-            result.append(URLEncoder.encode(pair.getName(), "UTF-8"));
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
             result.append("=");
-            result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
+            result.append(URLEncoder.encode(entry.getValue().toString(), "UTF-8"));
         }
 
 
-        Log.v(TAG, "resul t: " + result.toString());
+        Log.v(TAG, "result: " + result.toString());
         return result.toString();
     }
 }
