@@ -42,7 +42,7 @@ public class FetchDBInfo {
 
         try {
 
-            String link = "http://" + addr + "/fetchDBInfo.php";
+            String link = "https://" + addr + "/fetchDBInfo.php";
 
             URL url = new URL(link);
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();

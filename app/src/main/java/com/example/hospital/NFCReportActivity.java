@@ -73,7 +73,7 @@ public class NFCReportActivity extends Activity {
         getMemberInfo();
         if(hasLocalData)
         {
-            new FetchDBInfo(mid, imei).getInfo();
+           // new FetchDBInfo(mid, imei).getInfo();
         }
     }
 
