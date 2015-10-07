@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,17 +20,19 @@ public class NFCReportActivity extends Activity {
     private static final String TAG = NFCReportActivity.class.getSimpleName();
 
     private Button confirm_btn;
-    private TextView mid_input;
-    private TextView mid;
-    private TextView imei;
-    private TextView lastUpdate;
+    private TextView mid_input_txt;
+    private TextView mid_txt;
+    private TextView imei_txt;
+    private TextView lastUpdate_txt;
+
+    String imei;
 
     private void initViews() {
         confirm_btn = (Button) findViewById(R.id.confirm_btn);
-        mid_input = (TextView) findViewById(R.id.mid_input);
-        mid = (TextView) findViewById(R.id.mid);
-        imei = (TextView) findViewById(R.id.imei);
-        lastUpdate = (TextView) findViewById(R.id.lastupdate);
+        mid_input_txt = (TextView) findViewById(R.id.mid_input);
+        mid_txt = (TextView) findViewById(R.id.mid);
+        imei_txt = (TextView) findViewById(R.id.imei);
+        lastUpdate_txt = (TextView) findViewById(R.id.lastupdate);
 
     }
 
@@ -47,11 +50,12 @@ public class NFCReportActivity extends Activity {
             TelephonyManager mTelManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
             //String imei = mTelManager.getDeviceId(); //get imei
 
-            String[] info = {mid_input.getText().toString(), mTelManager.getDeviceId(), currentDateandTime};
+            String[] info = {mid_input_txt.getText().toString(), mTelManager.getDeviceId(), currentDateandTime};
 
             Log.v(TAG, "Current Time: " + currentDateandTime);
 
             insertMemberInfo(info);
+
 
         }
     };
@@ -64,7 +68,6 @@ public class NFCReportActivity extends Activity {
         setListeners();
         setAdapter();
         getMemberInfo();
-
     }
 
     @Override
@@ -116,17 +119,9 @@ public class NFCReportActivity extends Activity {
             Log.v(TAG, "IMEI:  " + imei);
             Log.v(TAG, "DateTime:" + lastUpdate);
 
-//            Toast.makeText(getApplication(), "ROWID: " + rowid+
-//                                             "\nMID: " + mid +
-//                                             "\nIMEI:  " + imei +
-//                                             "\nDateTime:" + lastUpdate
-//                                            , Toast.LENGTH_LONG).show();
-
-
-
-            this.mid.setText(mid);
-            this.imei.setText(imei);
-            this.lastUpdate.setText(lastUpdate);
+            this.mid_txt.setText(mid);
+            this.imei_txt.setText(imei);
+            this.lastUpdate_txt.setText(lastUpdate);
 
 //			currentCondition_txt.setText(cursor.getString(3));
 //			humidity_txt.setText(cursor.getString(4));
@@ -134,5 +129,14 @@ public class NFCReportActivity extends Activity {
 //			reliability_txt.setText(cursor.getDouble(6) + "%");
 //			lastUpdate_txt.setText(cursor.getString(7));
         }
+        else
+        {
+                        Toast.makeText(getApplication(), "尚未建立資料\n請先輸入身分證字號以建立資料", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void getMemberDayList()
+    {
+
     }
 }
