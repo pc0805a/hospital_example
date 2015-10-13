@@ -40,7 +40,7 @@ public class NFCReportActivity extends Activity {
 
     private boolean hasLocalData=false;
 
-    String mid;
+    String id;
     String imei;
     String lastUpdate;
 
@@ -87,9 +87,9 @@ public class NFCReportActivity extends Activity {
         getMemberInfo();
         if(hasLocalData)
         {
-
+            new fetchData().execute();
         }
-       new fetchData().execute();
+
     }
 
     @Override
@@ -133,16 +133,16 @@ public class NFCReportActivity extends Activity {
 
             long rowid = cursor.getLong(0);
 
-            mid = cursor.getString(1);
+            id = cursor.getString(1);
             imei = cursor.getString(2);
             lastUpdate = cursor.getString(3);
 
             Log.v(TAG, "ROWID: " +rowid);
-            Log.v(TAG, "MID: " + mid);
+            Log.v(TAG, "MID: " + id);
             Log.v(TAG, "IMEI:  " + imei);
             Log.v(TAG, "DateTime:" + lastUpdate);
 
-            this.mid_txt.setText(mid);
+            this.mid_txt.setText(id);
             this.imei_txt.setText(imei);
             this.lastUpdate_txt.setText(lastUpdate);
 
@@ -169,8 +169,8 @@ public class NFCReportActivity extends Activity {
 
             HashMap<String, String> postDataParams = new HashMap<String, String>();
 
-            postDataParams.put("id", "a123456789");
-            postDataParams.put("imei", "123");
+            postDataParams.put("id", id);
+            postDataParams.put("imei", imei);
 
 
             String result = getInfo(postURL, postDataParams);
