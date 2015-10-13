@@ -12,6 +12,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -43,6 +47,7 @@ public class NFCReportActivity extends Activity {
     String id;
     String imei;
     String lastUpdate;
+    String [][] mDayList;
 
     private void initViews() {
         confirm_btn = (Button) findViewById(R.id.confirm_btn);
@@ -174,6 +179,23 @@ public class NFCReportActivity extends Activity {
 
 
             String result = getInfo(postURL, postDataParams);
+            try {
+                JSONArray resultJSON = new JSONArray(result);
+
+                String doctor = resultJSON.getJSONObject(1).getString("doctor");
+
+//                String year = resultJSON.getString("year");
+//                String month = resultJSON.getString("month");
+//                String day = resultJSON.getString("day");
+//                String time = resultJSON.getString("time");
+
+                Log.v(TAG, "doctor: "+ doctor);
+
+            }catch(JSONException e){
+
+            }
+
+
             Log.v(TAG, "result: "+result + "\nend");
             return null;
         }
