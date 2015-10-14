@@ -36,10 +36,12 @@ public class NFCReportActivity extends Activity {
     private static final String TAG = NFCReportActivity.class.getSimpleName();
 
     private Button confirm_btn;
+    private Button f_Dlist_btn;
     private TextView mid_input_txt;
     private TextView mid_txt;
     private TextView imei_txt;
     private TextView lastUpdate_txt;
+    private TextView dayListLastUpdate_txt;
 
     private boolean hasLocalData=false;
 
@@ -49,19 +51,23 @@ public class NFCReportActivity extends Activity {
     String imei;
     String lastUpdate;
     String dayListLastUpdate;
-    String [][] mDayList;
+
 
     private void initViews() {
         confirm_btn = (Button) findViewById(R.id.confirm_btn);
+        f_Dlist_btn = (Button) findViewById(R.id.f_Dlist_btn);
+
         mid_input_txt = (TextView) findViewById(R.id.mid_input);
         mid_txt = (TextView) findViewById(R.id.mid);
         imei_txt = (TextView) findViewById(R.id.imei);
         lastUpdate_txt = (TextView) findViewById(R.id.lastupdate);
+        dayListLastUpdate_txt = (TextView) findViewById(R.id.dlist_lastupdate);
 
     }
 
     private void setListeners() {
         confirm_btn.setOnClickListener(confirm);
+        f_Dlist_btn.setOnClickListener(fDlist);
     }
 
     private View.OnClickListener confirm = new View.OnClickListener(){
@@ -81,6 +87,21 @@ public class NFCReportActivity extends Activity {
             insertMemberInfo(info);
 
 
+        }
+    };
+
+    private View.OnClickListener fDlist = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            new fetchData().execute();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+
+            dayListLastUpdate = currentDateandTime;
+            memberInfo.updateDlistTime(currentDateandTime);
+
+            dayListLastUpdate_txt.setText(dayListLastUpdate);
         }
     };
 
@@ -127,7 +148,7 @@ public class NFCReportActivity extends Activity {
 
         memberInfo.delete(1);
         memberInfo.insert(insertData);
-        memberInfo.updateDlistTime("kkkk");
+
         getMemberInfo();
 
     }
@@ -155,6 +176,7 @@ public class NFCReportActivity extends Activity {
             this.mid_txt.setText(id);
             this.imei_txt.setText(imei);
             this.lastUpdate_txt.setText(lastUpdate);
+            this.dayListLastUpdate_txt.setText(dayListLastUpdate);
 
 //			currentCondition_txt.setText(cursor.getString(3));
 //			humidity_txt.setText(cursor.getString(4));

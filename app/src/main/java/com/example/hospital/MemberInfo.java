@@ -83,6 +83,7 @@ public class MemberInfo {
         args.put(KEY_MID, data[0]);
         args.put(KEY_IMEI, data[1]);
         args.put(KEY_LASTUP, data[2]);
+        args.put(KEY_DLASTUP, data[3]);
 
         Log.v(TAG, "Insert Done!!");
 
@@ -94,6 +95,7 @@ public class MemberInfo {
         ContentValues args = new ContentValues();
         args.put(KEY_DLASTUP, data);
 
+        Log.v(TAG, data);
         Log.v(TAG, "Update DListTime Done!!");
 
         return db.update(DatabaseHelper.DATABASE_TABLE, args, KEY_ROWID + " = " + 1, null);

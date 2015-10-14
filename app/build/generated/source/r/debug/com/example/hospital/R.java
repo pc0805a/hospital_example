@@ -19,6 +19,8 @@ public final class R {
     }
     public static final class id {
         public static final int confirm_btn=0x7f080005;
+        public static final int dlist_last_update_tag=0x7f08000f;
+        public static final int dlist_lastupdate=0x7f080010;
         public static final int f_Dlist_btn=0x7f08000e;
         public static final int imei=0x7f080009;
         public static final int imei_tag=0x7f080008;
