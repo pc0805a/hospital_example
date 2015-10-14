@@ -1,6 +1,19 @@
 package com.example.hospital;
 
 /**
+ * Created by User on 2015/10/14.
+ */
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+
+/**
  * Created by User on 2015/5/22.
  */
 import android.content.ContentValues;
@@ -11,19 +24,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class MemberInfo {
+public class MemberDayList {
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
-        public static final String DATABASE_NAME = "memberInfo.db";
+        public static final String DATABASE_NAME = "memberDayList.db";
         public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_TABLE = "memberInfo";
-        public static final String DATABASE_CREATE = "CREATE table memberInfo("
-                + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "_mid TEXT, "
-                + "_imei TEXT, "
-                + "_last_update TEXT, "
-                + "_daylist_last_update TEXT" + " ); ";
+        public static final String DATABASE_TABLE = "memberDayList";
+        public static final String DATABASE_CREATE = "CREATE table memberDayList("
+                + "_sn INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "_divdision TEXT, "
+                + "_doctor TEXT, "
+                + "_year TEXT, "
+                + "_month TEXT, "
+                + "_day TEXT, "
+                + "_time TEXT, "
+                + "_num TEXT" + "); ";
 
         public DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -54,13 +70,12 @@ public class MemberInfo {
     public static final String KEY_MID = "_mid";
     public static final String KEY_IMEI = "_imei";
     public static final String KEY_LASTUP = "_last_update";
-    public static final String KEY_DLASTUP = "_daylist_last_update";
 
-    public MemberInfo(Context context) {
+    public MemberDayList(Context context) {
         this.mContext = context;
     }
 
-    public MemberInfo open() throws SQLException {
+    public MemberDayList open() throws SQLException {
         dbHelper = new DatabaseHelper(mContext);
         db = dbHelper.getWritableDatabase();
 
@@ -72,7 +87,7 @@ public class MemberInfo {
     }
 
     public Cursor getAll() {
-        String[] strCol = new String[]{KEY_ROWID, KEY_MID, KEY_IMEI, KEY_LASTUP, KEY_DLASTUP};
+        String[] strCol = new String[]{KEY_ROWID, KEY_MID, KEY_IMEI, KEY_LASTUP};
         return db.query(DatabaseHelper.DATABASE_TABLE, strCol, null, null,
                 null, null, KEY_ROWID + " DESC");
     }
@@ -90,15 +105,6 @@ public class MemberInfo {
 
     }
 
-    public int updateDlistTime(String data) {
-        ContentValues args = new ContentValues();
-        args.put(KEY_DLASTUP, data);
-
-        Log.v(TAG, "Update DListTime Done!!");
-
-        return db.update(DatabaseHelper.DATABASE_TABLE, args, KEY_ROWID + " = " + 1, null);
-
-    }
 
     public boolean delete(long rowId) {
 
