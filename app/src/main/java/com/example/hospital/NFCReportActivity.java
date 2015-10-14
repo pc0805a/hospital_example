@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44,9 +43,12 @@ public class NFCReportActivity extends Activity {
 
     private boolean hasLocalData=false;
 
+    private MemberInfo memberInfo;
+
     String id;
     String imei;
     String lastUpdate;
+    String dayListLastUpdate;
     String [][] mDayList;
 
     private void initViews() {
@@ -72,7 +74,7 @@ public class NFCReportActivity extends Activity {
             TelephonyManager mTelManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
             imei = mTelManager.getDeviceId(); //get imei
 
-            String[] info = {mid_input_txt.getText().toString(), imei, currentDateandTime};
+            String[] info = {mid_input_txt.getText().toString(), imei, currentDateandTime, dayListLastUpdate};
 
             Log.v(TAG, "Current Time: " + currentDateandTime);
 
@@ -107,30 +109,31 @@ public class NFCReportActivity extends Activity {
         super.onPause();
     }
 
-    private MemberInfo meberInfo;
-    private Cursor mCursor;
+
 
     private void setAdapter() {
-        meberInfo = new  MemberInfo(this);
-        meberInfo.open();
+        memberInfo = new  MemberInfo(this);
+        memberInfo.open();
     }
 
     private void insertMemberInfo(String[] data) {
 
-        String[] insertData = new String[3];
+        String[] insertData = new String[4];
 
         insertData[0] = data[0];//member id
         insertData[1] = data[1];//imei
         insertData[2] = data[2];//last update time
+        insertData[3] = data[3];//daylist last update time
 
-        meberInfo.delete(1);
-        meberInfo.insert(insertData);
+        memberInfo.delete(1);
+        memberInfo.insert(insertData);
+        memberInfo.updateDlistTime("kkkk");
         getMemberInfo();
 
     }
 
     private void getMemberInfo() {
-        Cursor cursor = meberInfo.getAll();
+        Cursor cursor = memberInfo.getAll();
         int row_num = cursor.getCount();
         if (row_num != 0) {
             hasLocalData = true;
@@ -141,11 +144,13 @@ public class NFCReportActivity extends Activity {
             id = cursor.getString(1);
             imei = cursor.getString(2);
             lastUpdate = cursor.getString(3);
+            dayListLastUpdate = cursor.getString(4);
 
             Log.v(TAG, "ROWID: " +rowid);
             Log.v(TAG, "MID: " + id);
             Log.v(TAG, "IMEI:  " + imei);
-            Log.v(TAG, "DateTime:" + lastUpdate);
+            Log.v(TAG, "LastUpdate:" + lastUpdate);
+            Log.v(TAG, "DlistLastUpdate:" + dayListLastUpdate);
 
             this.mid_txt.setText(id);
             this.imei_txt.setText(imei);
@@ -168,6 +173,10 @@ public class NFCReportActivity extends Activity {
 
     private class fetchData extends AsyncTask<String, Void, String>
     {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -194,12 +203,15 @@ public class NFCReportActivity extends Activity {
             }catch(JSONException e){
 
             }
-
-
             Log.v(TAG, "result: "+result + "\nend");
             return null;
         }
 
+        @Override
+        protected void onPostExecute(String result)
+        {
+
+        }
 
     }
 
