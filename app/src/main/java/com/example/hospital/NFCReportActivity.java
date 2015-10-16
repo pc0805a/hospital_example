@@ -3,12 +3,16 @@ package com.example.hospital;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +47,8 @@ public class NFCReportActivity extends Activity {
     private TextView lastUpdate_txt;
     private TextView dayListLastUpdate_txt;
 
+    private ProgressBar loading_aninmation;
+
     private boolean hasLocalData=false;
 
     private MemberInfo memberInfo;
@@ -62,6 +68,9 @@ public class NFCReportActivity extends Activity {
         imei_txt = (TextView) findViewById(R.id.imei);
         lastUpdate_txt = (TextView) findViewById(R.id.lastupdate);
         dayListLastUpdate_txt = (TextView) findViewById(R.id.dlist_lastupdate);
+
+        loading_aninmation = (ProgressBar) findViewById(R.id.loading_animation);
+        loading_aninmation.setVisibility(View.INVISIBLE);
 
     }
 
@@ -95,13 +104,7 @@ public class NFCReportActivity extends Activity {
         public void onClick(View v) {
             new fetchData().execute();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            String currentDateandTime = sdf.format(new Date());
 
-            dayListLastUpdate = currentDateandTime;
-            memberInfo.updateDlistTime(currentDateandTime);
-
-            dayListLastUpdate_txt.setText(dayListLastUpdate);
         }
     };
 
@@ -198,6 +201,9 @@ public class NFCReportActivity extends Activity {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
+            f_Dlist_btn.setEnabled(false);
+            loading_aninmation.setVisibility(View.VISIBLE);
+
         }
 
         @Override
@@ -232,6 +238,25 @@ public class NFCReportActivity extends Activity {
         @Override
         protected void onPostExecute(String result)
         {
+
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+
+            if(checkNetworkStatus())
+            {
+                dayListLastUpdate = currentDateandTime;
+                memberInfo.updateDlistTime(currentDateandTime);
+                dayListLastUpdate_txt.setText(dayListLastUpdate);
+            }
+            else
+            {
+                dayListLastUpdate_txt.setText(dayListLastUpdate + "\n(無法更新)");
+                Toast.makeText(getApplication(), "目前沒有網路連線\n無法更新資料", Toast.LENGTH_LONG).show();
+            }
+
+            f_Dlist_btn.setEnabled(true);
+            loading_aninmation.setVisibility(View.INVISIBLE);
 
         }
 
@@ -296,6 +321,18 @@ public class NFCReportActivity extends Activity {
         }
 
         return result.toString();
+    }
+
+    private boolean checkNetworkStatus()
+    {
+        ConnectivityManager cm;
+        cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        Log.v(TAG, "isConnected: " + isConnected);
+        return isConnected;
     }
 }
 
