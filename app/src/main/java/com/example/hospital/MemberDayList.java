@@ -16,13 +16,6 @@ import android.util.Log;
 /**
  * Created by User on 2015/5/22.
  */
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class MemberDayList {
 
@@ -32,7 +25,7 @@ public class MemberDayList {
         public static final int DATABASE_VERSION = 1;
         public static final String DATABASE_TABLE = "memberDayList";
         public static final String DATABASE_CREATE = "CREATE table memberDayList("
-                + "_sn INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "_sn INTEGER PRIMARY KEY, "
                 + "_division TEXT, "
                 + "_doctor TEXT, "
                 + "_year TEXT, "
@@ -117,16 +110,16 @@ public class MemberDayList {
     public Long insert(String[] data) {
 
         ContentValues args = new ContentValues();
-        args.put(KEY_DIVISION, data[0]);
-        args.put(KEY_DOCTOR, data[1]);
-        args.put(KEY_YEAR, data[2]);
-        args.put(KEY_MONTH, data[3]);
-        args.put(KEY_DAY, data[4]);
-        args.put(KEY_TIME, data[5]);
-        args.put(KEY_NUM, Integer.parseInt(data[6]));
+        args.put(KEY_SN, data[0]);
+        args.put(KEY_DIVISION, data[1]);
+        args.put(KEY_DOCTOR, data[2]);
+        args.put(KEY_YEAR, data[3]);
+        args.put(KEY_MONTH, data[4]);
+        args.put(KEY_DAY, data[5]);
+        args.put(KEY_TIME, data[6]);
+        args.put(KEY_NUM, Integer.parseInt(data[7]));
 
         Log.v(TAG, "Insert DayList Done!!");
-
         return db.insert(DatabaseHelper.DATABASE_TABLE, null, args);
 
     }
