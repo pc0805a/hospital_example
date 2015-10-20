@@ -11,13 +11,13 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -52,6 +52,7 @@ public class NFCReportActivity extends Activity {
     private boolean hasLocalData=false;
 
     private MemberInfo memberInfo;
+    private MemberDayList memberDayList;
 
     String id;
     String imei;
@@ -136,8 +137,11 @@ public class NFCReportActivity extends Activity {
 
 
     private void setAdapter() {
-        memberInfo = new  MemberInfo(this);
+        memberInfo = new MemberInfo(this);
         memberInfo.open();
+
+        memberDayList =  new  MemberDayList(this);
+        memberDayList.open();
     }
 
     private void insertMemberInfo(String[] data) {
@@ -170,22 +174,13 @@ public class NFCReportActivity extends Activity {
             lastUpdate = cursor.getString(3);
             dayListLastUpdate = cursor.getString(4);
 
-            Log.v(TAG, "ROWID: " +rowid);
-            Log.v(TAG, "MID: " + id);
-            Log.v(TAG, "IMEI:  " + imei);
             Log.v(TAG, "LastUpdate:" + lastUpdate);
-            Log.v(TAG, "DlistLastUpdate:" + dayListLastUpdate);
 
             this.mid_txt.setText(id);
             this.imei_txt.setText(imei);
             this.lastUpdate_txt.setText(lastUpdate);
             this.dayListLastUpdate_txt.setText(dayListLastUpdate);
 
-//			currentCondition_txt.setText(cursor.getString(3));
-//			humidity_txt.setText(cursor.getString(4));
-//			currentTemperature_txt.setText(cursor.getString(5));
-//			reliability_txt.setText(cursor.getDouble(6) + "%");
-//			lastUpdate_txt.setText(cursor.getString(7));
         }
         else
         {
@@ -215,18 +210,27 @@ public class NFCReportActivity extends Activity {
             postDataParams.put("imei", imei);
 
 
+
             String result = getInfo(postURL, postDataParams);
             try {
+
+                memberDayList.deleteOldDAyList();
+
                 JSONArray resultJSON = new JSONArray(result);
 
-                String doctor = resultJSON.getJSONObject(1).getString("doctor");
+                for(int i=0; i<resultJSON.length(); i++)
+                {
+                    String[] tempDListData = new String[7];
+                    tempDListData[0]=resultJSON.getJSONObject(i).getString("division");
+                    tempDListData[1]=resultJSON.getJSONObject(i).getString("doctor");
+                    tempDListData[2]=resultJSON.getJSONObject(i).getString("year");
+                    tempDListData[3]=resultJSON.getJSONObject(i).getString("month");
+                    tempDListData[4]=resultJSON.getJSONObject(i).getString("day");
+                    tempDListData[5]=resultJSON.getJSONObject(i).getString("time");
+                    tempDListData[6]=resultJSON.getJSONObject(i).getString("num");
+                    memberDayList.insert(tempDListData);
+                }
 
-//                String year = resultJSON.getString("year");
-//                String month = resultJSON.getString("month");
-//                String day = resultJSON.getString("day");
-//                String time = resultJSON.getString("time");
-
-                Log.v(TAG, "doctor: "+ doctor);
 
             }catch(JSONException e){
 
@@ -248,6 +252,7 @@ public class NFCReportActivity extends Activity {
                 dayListLastUpdate = currentDateandTime;
                 memberInfo.updateDlistTime(currentDateandTime);
                 dayListLastUpdate_txt.setText(dayListLastUpdate);
+                Log.v(TAG, "DlistLastUpdate:" + dayListLastUpdate);
             }
             else
             {

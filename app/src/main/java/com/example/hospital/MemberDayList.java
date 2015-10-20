@@ -33,13 +33,13 @@ public class MemberDayList {
         public static final String DATABASE_TABLE = "memberDayList";
         public static final String DATABASE_CREATE = "CREATE table memberDayList("
                 + "_sn INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "_divdision TEXT, "
+                + "_division TEXT, "
                 + "_doctor TEXT, "
                 + "_year TEXT, "
                 + "_month TEXT, "
                 + "_day TEXT, "
                 + "_time TEXT, "
-                + "_num TEXT" + "); ";
+                + "_num INTEGER" + "); ";
 
         public DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,12 +64,14 @@ public class MemberDayList {
     private Context mContext = null;
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
-    private String woeid;
 
-    public static final String KEY_ROWID = "_id";
-    public static final String KEY_MID = "_mid";
-    public static final String KEY_IMEI = "_imei";
-    public static final String KEY_LASTUP = "_last_update";
+    public static final String KEY_DIVISION = "_division";
+    public static final String KEY_DOCTOR = "_doctor";
+    public static final String KEY_YEAR = "_year";
+    public static final String KEY_MONTH = "_month";
+    public static final String KEY_DAY = "_day";
+    public static final String KEY_TIME= "_time";
+    public static final String KEY_NUM = "_num";
 
     public MemberDayList(Context context) {
         this.mContext = context;
@@ -87,31 +89,50 @@ public class MemberDayList {
     }
 
     public Cursor getAll() {
-        String[] strCol = new String[]{KEY_ROWID, KEY_MID, KEY_IMEI, KEY_LASTUP};
+        String[] strCol = new String[]{KEY_DIVISION, KEY_DOCTOR, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_TIME, KEY_NUM};
         return db.query(DatabaseHelper.DATABASE_TABLE, strCol, null, null,
-                null, null, KEY_ROWID + " DESC");
+                null, null, KEY_DIVISION + " DESC");
+    }
+
+    public Cursor getSpecific(String division, String doctor, String year, String month, String day, String time, String num)
+    {
+        String[] strCol = new String[]{KEY_DIVISION, KEY_DOCTOR, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_TIME, KEY_NUM};
+
+        String whereClause = "_division = ? AND _doctor = ? AND _year = ? AND _month = ? AND _day = ? AND _time = ? AND _num = ?";
+        String[] whereArgs = new String[] {
+                division,
+                doctor,
+                year,
+                month,
+                day,
+                time,
+                num
+        };
+
+        return db.query(DatabaseHelper.DATABASE_TABLE, strCol, null, whereArgs,
+                null, null, KEY_DIVISION + " DESC");
     }
 
     public Long insert(String[] data) {
-        ContentValues args = new ContentValues();
-        args.put(KEY_ROWID, 1);
-        args.put(KEY_MID, data[0]);
-        args.put(KEY_IMEI, data[1]);
-        args.put(KEY_LASTUP, data[2]);
 
-        Log.v(TAG, "Insert Done!!");
+        ContentValues args = new ContentValues();
+        args.put(KEY_DIVISION, data[0]);
+        args.put(KEY_DOCTOR, data[1]);
+        args.put(KEY_YEAR, data[2]);
+        args.put(KEY_MONTH, data[3]);
+        args.put(KEY_DAY, data[4]);
+        args.put(KEY_TIME, data[5]);
+        args.put(KEY_NUM, Integer.parseInt(data[6]));
+
+        Log.v(TAG, "Insert DayList Done!!");
 
         return db.insert(DatabaseHelper.DATABASE_TABLE, null, args);
 
     }
 
 
-    public boolean delete(long rowId) {
-
-        Log.v(TAG, "Delete Done!!");
-
-        return db.delete(DatabaseHelper.DATABASE_TABLE,
-                KEY_ROWID + "=" + rowId, null) > 0;
-
+    public void deleteOldDAyList() {
+        db.execSQL("delete from " + DatabaseHelper.DATABASE_TABLE);
+        Log.v(TAG, "Delete old DayList Done!!");
     }
 }

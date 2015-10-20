@@ -48,7 +48,6 @@ public class MemberInfo {
     private Context mContext = null;
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
-    private String woeid;
 
     public static final String KEY_ROWID = "_id";
     public static final String KEY_MID = "_mid";
@@ -85,7 +84,7 @@ public class MemberInfo {
         args.put(KEY_LASTUP, data[2]);
         args.put(KEY_DLASTUP, data[3]);
 
-        Log.v(TAG, "Insert Done!!");
+        Log.v(TAG, "Insert MemberInfo Done!!");
 
         return db.insert(DatabaseHelper.DATABASE_TABLE, null, args);
 
