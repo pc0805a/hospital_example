@@ -6,11 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class MyHostApduService extends HostApduService {
-
-	private int messageCounter = 0;
-
+	
 	private MemberInfo meberInfo;
-	private Cursor mCursor;
 	private String memberID;
 
 	private void getMemberInfo() {

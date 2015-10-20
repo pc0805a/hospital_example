@@ -21,6 +21,7 @@ public final class R {
         public static final int confirm_btn=0x7f080005;
         public static final int dlist_last_update_tag=0x7f08000f;
         public static final int dlist_lastupdate=0x7f080010;
+        public static final int dlist_spinner=0x7f08000d;
         public static final int f_Dlist_btn=0x7f08000e;
         public static final int imei=0x7f080009;
         public static final int imei_tag=0x7f080008;
@@ -28,7 +29,6 @@ public final class R {
         public static final int lastupdate=0x7f08000b;
         public static final int lastupdate_tag=0x7f08000a;
         public static final int loading_animation=0x7f080011;
-        public static final int m_dlist_spinner=0x7f08000d;
         public static final int main_button_1=0x7f080000;
         public static final int main_button_2=0x7f080001;
         public static final int main_button_3=0x7f080002;

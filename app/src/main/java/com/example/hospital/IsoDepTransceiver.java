@@ -1,9 +1,8 @@
 package com.example.hospital;
 
-import java.io.IOException;
-
 import android.nfc.tech.IsoDep;
-import android.util.Log;
+
+import java.io.IOException;
 
 public class IsoDepTransceiver implements Runnable {
 
