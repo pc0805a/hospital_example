@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,9 @@ public class NFCReportActivity extends Activity {
     private TextView dayListLastUpdate_txt;
 
     private ProgressBar loading_aninmation;
+    Spinner dListSpinner;
+
+
 
     private boolean hasLocalData=false;
 
@@ -72,6 +77,7 @@ public class NFCReportActivity extends Activity {
 
         loading_aninmation = (ProgressBar) findViewById(R.id.loading_animation);
         loading_aninmation.setVisibility(View.INVISIBLE);
+        dListSpinner = (Spinner) findViewById(R.id.dlist_spinner);
 
     }
 
@@ -104,8 +110,6 @@ public class NFCReportActivity extends Activity {
         @Override
         public void onClick(View v) {
             new fetchData().execute();
-
-
         }
     };
 
@@ -209,8 +213,6 @@ public class NFCReportActivity extends Activity {
             postDataParams.put("id", id);
             postDataParams.put("imei", imei);
 
-
-
             String result = getInfo(postURL, postDataParams);
             try {
 
@@ -253,6 +255,8 @@ public class NFCReportActivity extends Activity {
                 memberInfo.updateDlistTime(currentDateandTime);
                 dayListLastUpdate_txt.setText(dayListLastUpdate);
                 Log.v(TAG, "DlistLastUpdate:" + dayListLastUpdate);
+                ArrayAdapter adapter = setCategoryArray();
+                dListSpinner.setAdapter(adapter);
             }
             else
             {
@@ -265,6 +269,15 @@ public class NFCReportActivity extends Activity {
 
         }
 
+    }
+
+    private ArrayAdapter setCategoryArray(){
+
+        ArrayAdapter< String> adapter =new ArrayAdapter< String>( this,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        adapter.add("薪水");
+//        adapter.add("兼職");
+        return adapter;
     }
 
     private String getInfo(String requestURL,

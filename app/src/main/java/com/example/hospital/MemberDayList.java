@@ -65,6 +65,7 @@ public class MemberDayList {
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
+    public static final String KEY_SN = "_SN";
     public static final String KEY_DIVISION = "_division";
     public static final String KEY_DOCTOR = "_doctor";
     public static final String KEY_YEAR = "_year";
@@ -89,14 +90,14 @@ public class MemberDayList {
     }
 
     public Cursor getAll() {
-        String[] strCol = new String[]{KEY_DIVISION, KEY_DOCTOR, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_TIME, KEY_NUM};
+        String[] strCol = new String[]{ KEY_SN ,KEY_DIVISION, KEY_DOCTOR, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_TIME, KEY_NUM};
         return db.query(DatabaseHelper.DATABASE_TABLE, strCol, null, null,
                 null, null, KEY_DIVISION + " DESC");
     }
 
     public Cursor getSpecific(String division, String doctor, String year, String month, String day, String time, String num)
     {
-        String[] strCol = new String[]{KEY_DIVISION, KEY_DOCTOR, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_TIME, KEY_NUM};
+        String[] strCol = new String[]{KEY_SN ,KEY_DIVISION, KEY_DOCTOR, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_TIME, KEY_NUM};
 
         String whereClause = "_division = ? AND _doctor = ? AND _year = ? AND _month = ? AND _day = ? AND _time = ? AND _num = ?";
         String[] whereArgs = new String[] {
