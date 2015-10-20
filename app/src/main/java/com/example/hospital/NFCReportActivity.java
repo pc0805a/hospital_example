@@ -222,14 +222,15 @@ public class NFCReportActivity extends Activity {
 
                 for(int i=0; i<resultJSON.length(); i++)
                 {
-                    String[] tempDListData = new String[7];
-                    tempDListData[0]=resultJSON.getJSONObject(i).getString("division");
-                    tempDListData[1]=resultJSON.getJSONObject(i).getString("doctor");
-                    tempDListData[2]=resultJSON.getJSONObject(i).getString("year");
-                    tempDListData[3]=resultJSON.getJSONObject(i).getString("month");
-                    tempDListData[4]=resultJSON.getJSONObject(i).getString("day");
-                    tempDListData[5]=resultJSON.getJSONObject(i).getString("time");
-                    tempDListData[6]=resultJSON.getJSONObject(i).getString("num");
+                    String[] tempDListData = new String[8];
+                    tempDListData[0]=String.valueOf(i);
+                    tempDListData[1]=resultJSON.getJSONObject(i).getString("division");
+                    tempDListData[2]=resultJSON.getJSONObject(i).getString("doctor");
+                    tempDListData[3]=resultJSON.getJSONObject(i).getString("year");
+                    tempDListData[4]=resultJSON.getJSONObject(i).getString("month");
+                    tempDListData[5]=resultJSON.getJSONObject(i).getString("day");
+                    tempDListData[6]=resultJSON.getJSONObject(i).getString("time");
+                    tempDListData[7]=resultJSON.getJSONObject(i).getString("num");
                     memberDayList.insert(tempDListData);
                 }
 

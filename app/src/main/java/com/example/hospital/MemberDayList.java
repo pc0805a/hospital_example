@@ -23,8 +23,18 @@ public class MemberDayList {
 
         public static final String DATABASE_NAME = "memberDayList.db";
         public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_TABLE = "memberDayList";
-        public static final String DATABASE_CREATE = "CREATE table memberDayList("
+        public static final String DATABASE_MDAYLIST_TABLE = "memberDayList";
+        public static final String DATABASE_SELECTED_TABLE = "selectedDayList";
+        public static final String DATABASE_CREATE_MDAYLIST = "CREATE table memberDayList("
+                + "_sn INTEGER PRIMARY KEY, "
+                + "_division TEXT, "
+                + "_doctor TEXT, "
+                + "_year TEXT, "
+                + "_month TEXT, "
+                + "_day TEXT, "
+                + "_time TEXT, "
+                + "_num INTEGER" + "); ";
+        public static final String DATABASE_CREATE_SELECTED = "CREATE table selectedDayList("
                 + "_sn INTEGER PRIMARY KEY, "
                 + "_division TEXT, "
                 + "_doctor TEXT, "
@@ -41,12 +51,14 @@ public class MemberDayList {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(DATABASE_CREATE);
+            db.execSQL(DATABASE_CREATE_MDAYLIST);
+            db.execSQL(DATABASE_CREATE_SELECTED);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_MDAYLIST_TABLE);
+            db.execSQL("DROP TABLE IF EXISTS " + DATABASE_SELECTED_TABLE);
             onCreate(db);
 
         }
@@ -84,7 +96,7 @@ public class MemberDayList {
 
     public Cursor getAll() {
         String[] strCol = new String[]{ KEY_SN ,KEY_DIVISION, KEY_DOCTOR, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_TIME, KEY_NUM};
-        return db.query(DatabaseHelper.DATABASE_TABLE, strCol, null, null,
+        return db.query(DatabaseHelper.DATABASE_MDAYLIST_TABLE, strCol, null, null,
                 null, null, KEY_DIVISION + " DESC");
     }
 
@@ -103,7 +115,7 @@ public class MemberDayList {
                 num
         };
 
-        return db.query(DatabaseHelper.DATABASE_TABLE, strCol, null, whereArgs,
+        return db.query(DatabaseHelper.DATABASE_MDAYLIST_TABLE, strCol, null, whereArgs,
                 null, null, KEY_DIVISION + " DESC");
     }
 
@@ -120,13 +132,13 @@ public class MemberDayList {
         args.put(KEY_NUM, Integer.parseInt(data[7]));
 
         Log.v(TAG, "Insert DayList Done!!");
-        return db.insert(DatabaseHelper.DATABASE_TABLE, null, args);
+        return db.insert(DatabaseHelper.DATABASE_MDAYLIST_TABLE, null, args);
 
     }
 
 
     public void deleteOldDAyList() {
-        db.execSQL("delete from " + DatabaseHelper.DATABASE_TABLE);
+        db.execSQL("delete from " + DatabaseHelper.DATABASE_MDAYLIST_TABLE);
         Log.v(TAG, "Delete old DayList Done!!");
     }
 }
