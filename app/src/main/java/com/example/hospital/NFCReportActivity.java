@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -83,25 +84,22 @@ public class NFCReportActivity extends Activity {
     private void setListeners() {
         confirm_btn.setOnClickListener(confirm);
         f_Dlist_btn.setOnClickListener(fDlist);
+        dListSpinner.setOnItemSelectedListener(spinner);
+
     }
 
     private View.OnClickListener confirm = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             String currentDateandTime = sdf.format(new Date());
 
             TelephonyManager mTelManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
             imei = mTelManager.getDeviceId(); //get imei
-
             String[] info = {mid_input_txt.getText().toString(), imei, currentDateandTime, dayListLastUpdate};
-
             Log.v(TAG, "Current Time: " + currentDateandTime);
 
             insertMemberInfo(info);
-
-
         }
     };
 
@@ -109,6 +107,19 @@ public class NFCReportActivity extends Activity {
         @Override
         public void onClick(View v) {
             new fetchData().execute();
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener spinner = new AdapterView.OnItemSelectedListener(){
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            Log.v(TAG,"spinner positin : "+position);
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
         }
     };
 
@@ -145,6 +156,9 @@ public class NFCReportActivity extends Activity {
 
         memberDayList =  new  MemberDayList(this);
         memberDayList.open();
+
+        ArrayAdapter adapter = setCategoryArray();
+        dListSpinner.setAdapter(adapter);
     }
 
     private void insertMemberInfo(String[] data) {
@@ -169,8 +183,6 @@ public class NFCReportActivity extends Activity {
         if (row_num != 0) {
             hasLocalData = true;
             cursor.moveToFirst();
-
-            long rowid = cursor.getLong(0);
 
             id = cursor.getString(1);
             imei = cursor.getString(2);
@@ -255,6 +267,7 @@ public class NFCReportActivity extends Activity {
                 memberInfo.updateDlistTime(currentDateandTime);
                 dayListLastUpdate_txt.setText(dayListLastUpdate);
                 Log.v(TAG, "DlistLastUpdate:" + dayListLastUpdate);
+
                 ArrayAdapter adapter = setCategoryArray();
                 dListSpinner.setAdapter(adapter);
             }
@@ -273,9 +286,40 @@ public class NFCReportActivity extends Activity {
 
     private ArrayAdapter setCategoryArray(){
 
-        ArrayAdapter< String> adapter =new ArrayAdapter< String>( this,android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        adapter.add("薪水");
+        ArrayAdapter< String> adapter =new ArrayAdapter< String>( this,R.layout.my_pinner);
+        adapter.setDropDownViewResource(R.layout.my_pinner);
+
+        Cursor cursor = memberDayList.getAll();
+        if(cursor.moveToFirst())
+        {
+            while(cursor.isAfterLast() == false)
+            {
+                String temp = "";
+
+                temp += DivisionToString.translate(cursor.getInt(1)) + " - ";
+                temp += cursor.getString(2);
+                temp += cursor.getString(3) + "年";
+                temp += cursor.getString(4) + "月";
+                temp += cursor.getString(5) + "日";
+
+                temp += cursor.getString(6);
+                temp += cursor.getString(7);
+
+//                for (int i=1; i<8; i++)
+//                {
+//                    if(i==1)
+//                        temp +=  DivisionToString.translate(cursor.getInt(i)) + "\n";
+//                    else
+//                        temp += cursor.getString(i);
+//
+//                    if(i!=7)
+//                        temp += " - ";
+//                }
+                adapter.add(temp);
+
+                cursor.moveToNext();
+            }
+        }
 //        adapter.add("兼職");
         return adapter;
     }
