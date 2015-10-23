@@ -8,6 +8,7 @@ import android.util.Log;
 public class MyHostApduService extends HostApduService {
 	
 	private MemberInfo meberInfo;
+	private MemberDayList memberDayList;
 	private String memberID;
 
 	private void getMemberInfo() {
