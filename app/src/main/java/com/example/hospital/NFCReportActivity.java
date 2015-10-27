@@ -194,7 +194,6 @@ public class NFCReportActivity extends Activity {
 
             this.mid_txt.setText(id);
             this.mid_input_txt.setText(id);
-
             this.imei_txt.setText(imei);
             this.lastUpdate_txt.setText(lastUpdate);
             this.dayListLastUpdate_txt.setText(dayListLastUpdate);
@@ -316,6 +315,23 @@ public class NFCReportActivity extends Activity {
                 temp += cursor.getString(3) + "年";
                 temp += cursor.getString(4) + "月";
                 temp += cursor.getString(5) + "日 - ";
+
+                switch(Integer.parseInt(cursor.getString(6))){
+                    case 1:
+                        temp += "早 - ";
+                        break;
+                    case 2:
+                        temp += "午 - ";
+                        break;
+                    case 3:
+                        temp += "晚 - ";
+                        break;
+                    default:
+                        break;
+                }
+
+
+
                 temp += cursor.getString(7) + "號";
 
                 adapter.add(temp);
