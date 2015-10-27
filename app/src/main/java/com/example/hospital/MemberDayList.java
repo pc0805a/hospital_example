@@ -70,7 +70,7 @@ public class MemberDayList {
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
-    public static final String KEY_SN = "_SN";
+    public static final String KEY_SN = "_sn";
     public static final String KEY_DIVISION = "_division";
     public static final String KEY_DOCTOR = "_doctor";
     public static final String KEY_YEAR = "_year";
@@ -100,22 +100,41 @@ public class MemberDayList {
                 null, null, KEY_DIVISION + " DESC");
     }
 
-    public Cursor getSpecific(String division, String doctor, String year, String month, String day, String time, String num)
+    public Long setSpinnerSelected(int sn) {
+        String[] strCol = new String[]{KEY_SN ,KEY_DIVISION, KEY_DOCTOR, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_TIME, KEY_NUM};
+
+        String whereClause = "_sn = ?";
+        String[] whereArgs = new String[] {
+                Integer.toString(sn)
+        };
+
+        Cursor cursor = db.query(DatabaseHelper.DATABASE_MDAYLIST_TABLE, strCol, whereClause, whereArgs, null, null, KEY_DIVISION + " DESC");
+
+        cursor.moveToFirst();
+
+        ContentValues args = new ContentValues();
+
+        args.put(KEY_SN, cursor.getInt(0));
+        args.put(KEY_DIVISION, cursor.getString(1));
+        args.put(KEY_DOCTOR, cursor.getString(2));
+        args.put(KEY_YEAR, cursor.getString(3));
+        args.put(KEY_MONTH, cursor.getString(4));
+        args.put(KEY_DAY, cursor.getString(5));
+        args.put(KEY_TIME, cursor.getString(6));
+        args.put(KEY_NUM, Integer.parseInt(cursor.getString(7)));
+
+
+        db.execSQL("delete from " + DatabaseHelper.DATABASE_SELECTED_TABLE);
+        return db.insert(DatabaseHelper.DATABASE_SELECTED_TABLE, null, args);
+
+    }
+
+    public Cursor getSpinnerSelected()
     {
         String[] strCol = new String[]{KEY_SN ,KEY_DIVISION, KEY_DOCTOR, KEY_YEAR, KEY_MONTH, KEY_DAY, KEY_TIME, KEY_NUM};
 
-        String whereClause = "_division = ? AND _doctor = ? AND _year = ? AND _month = ? AND _day = ? AND _time = ? AND _num = ?";
-        String[] whereArgs = new String[] {
-                division,
-                doctor,
-                year,
-                month,
-                day,
-                time,
-                num
-        };
 
-        return db.query(DatabaseHelper.DATABASE_MDAYLIST_TABLE, strCol, null, whereArgs,
+        return db.query(DatabaseHelper.DATABASE_SELECTED_TABLE, strCol, null, null,
                 null, null, KEY_DIVISION + " DESC");
     }
 
@@ -135,6 +154,8 @@ public class MemberDayList {
         return db.insert(DatabaseHelper.DATABASE_MDAYLIST_TABLE, null, args);
 
     }
+
+
 
 
     public void deleteOldDAyList() {

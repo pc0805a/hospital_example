@@ -114,6 +114,7 @@ public class NFCReportActivity extends Activity {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             Log.v(TAG,"spinner positin : "+position);
+            memberDayList.setSpinnerSelected(position);
 
         }
 
@@ -300,21 +301,9 @@ public class NFCReportActivity extends Activity {
                 temp += cursor.getString(2);
                 temp += cursor.getString(3) + "年";
                 temp += cursor.getString(4) + "月";
-                temp += cursor.getString(5) + "日";
+                temp += cursor.getString(5) + "日 - ";
+                temp += cursor.getString(7) + "號";
 
-                temp += cursor.getString(6);
-                temp += cursor.getString(7);
-
-//                for (int i=1; i<8; i++)
-//                {
-//                    if(i==1)
-//                        temp +=  DivisionToString.translate(cursor.getInt(i)) + "\n";
-//                    else
-//                        temp += cursor.getString(i);
-//
-//                    if(i!=7)
-//                        temp += " - ";
-//                }
                 adapter.add(temp);
 
                 cursor.moveToNext();

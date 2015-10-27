@@ -49,8 +49,8 @@ public class MemberInfo {
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
-    public static final String KEY_ROWID = "_id";
-    public static final String KEY_MID = "_mid";
+    public static final String KEY_ROWID = "_rowid";
+    public static final String KEY_MID = "_id";
     public static final String KEY_IMEI = "_imei";
     public static final String KEY_LASTUP = "_last_update";
     public static final String KEY_DLASTUP = "_daylist_last_update";
