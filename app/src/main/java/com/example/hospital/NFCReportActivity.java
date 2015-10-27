@@ -193,6 +193,8 @@ public class NFCReportActivity extends Activity {
             Log.v(TAG, "LastUpdate:" + lastUpdate);
 
             this.mid_txt.setText(id);
+            this.mid_input_txt.setText(id);
+
             this.imei_txt.setText(imei);
             this.lastUpdate_txt.setText(lastUpdate);
             this.dayListLastUpdate_txt.setText(dayListLastUpdate);
@@ -251,13 +253,25 @@ public class NFCReportActivity extends Activity {
 
             }
             Log.v(TAG, "result: "+result + "\nend");
-            return null;
+            return result;
         }
 
         @Override
         protected void onPostExecute(String result)
         {
-
+            try{
+                if(Integer.parseInt(result)==-1)
+                {
+                    Toast.makeText(getApplication(), "您在資料庫中尚未建立資料", Toast.LENGTH_LONG).show();
+                    mid_txt.setText("您尚未建立資料");
+                }
+                else if(Integer.parseInt(result)==-2)
+                {
+                    Toast.makeText(getApplication(), "您尚未綁定手機", Toast.LENGTH_LONG).show();
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             String currentDateandTime = sdf.format(new Date());
