@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 public class MyHostApduService extends HostApduService {
 
@@ -53,9 +54,6 @@ public class MyHostApduService extends HostApduService {
 			time = cursor.getString(6);
 			num= cursor.getInt(7);
 		}
-
-        Log.v(TAG, doctor);
-
 	}
 
 	@Override
@@ -68,6 +66,13 @@ public class MyHostApduService extends HostApduService {
 		}
 		else {
 			Log.i("HCEDEMO", "Received: " + new String(apdu));
+			String[] tempMessage = new String(apdu).split(":");
+			switch(Integer.parseInt(tempMessage[1]))
+			{
+				case 1:
+					Toast.makeText(getApplication(), "已報到", Toast.LENGTH_LONG).show();
+					break;
+			}
 			return getNextMessage();
 		}
 	}

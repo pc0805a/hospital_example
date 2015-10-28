@@ -7,6 +7,7 @@ package com.example.hospital;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -113,19 +114,25 @@ public class MemberDayList {
         cursor.moveToFirst();
 
         ContentValues args = new ContentValues();
+        try {
+            args.put(KEY_SN, cursor.getInt(0));
+            args.put(KEY_DIVISION, cursor.getString(1));
+            args.put(KEY_DOCTOR, cursor.getString(2));
+            args.put(KEY_YEAR, cursor.getString(3));
+            args.put(KEY_MONTH, cursor.getString(4));
+            args.put(KEY_DAY, cursor.getString(5));
+            args.put(KEY_TIME, cursor.getString(6));
+            args.put(KEY_NUM, Integer.parseInt(cursor.getString(7)));
 
-        args.put(KEY_SN, cursor.getInt(0));
-        args.put(KEY_DIVISION, cursor.getString(1));
-        args.put(KEY_DOCTOR, cursor.getString(2));
-        args.put(KEY_YEAR, cursor.getString(3));
-        args.put(KEY_MONTH, cursor.getString(4));
-        args.put(KEY_DAY, cursor.getString(5));
-        args.put(KEY_TIME, cursor.getString(6));
-        args.put(KEY_NUM, Integer.parseInt(cursor.getString(7)));
+            db.execSQL("delete from " + DatabaseHelper.DATABASE_SELECTED_TABLE);
+            return db.insert(DatabaseHelper.DATABASE_SELECTED_TABLE, null, args);
+        }catch(CursorIndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
 
 
-        db.execSQL("delete from " + DatabaseHelper.DATABASE_SELECTED_TABLE);
-        return db.insert(DatabaseHelper.DATABASE_SELECTED_TABLE, null, args);
 
     }
 
