@@ -12,6 +12,7 @@ public class MyHostApduService extends HostApduService {
 	private MemberInfo meberInfo;
 	private MemberDayList memberDayList;
 	private String memberID;
+	private String imei;
 
 	private String division;
 	private String doctor;
@@ -32,6 +33,7 @@ public class MyHostApduService extends HostApduService {
 		if (row_num != 0) {
 			cursor.moveToFirst();
 			memberID = cursor.getString(1);
+			imei = cursor.getString(2);
 		}
 	}
 	private void getSelectedDayList()
@@ -82,7 +84,8 @@ public class MyHostApduService extends HostApduService {
                                             month + ":" +
                                             day + ":" +
                                             time + ":" +
-                                            num).getBytes();
+                                            num + ":" +
+											imei).getBytes();
     }
 
 	private boolean selectAidApdu(byte[] apdu) {
