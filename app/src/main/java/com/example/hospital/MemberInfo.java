@@ -19,8 +19,8 @@ public class MemberInfo {
         public static final int DATABASE_VERSION = 1;
         public static final String DATABASE_TABLE = "memberInfo";
         public static final String DATABASE_CREATE = "CREATE table memberInfo("
-                + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "_mid TEXT, "
+                + "_rowid INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "_id TEXT, "
                 + "_imei TEXT, "
                 + "_last_update TEXT, "
                 + "_daylist_last_update TEXT" + " ); ";
