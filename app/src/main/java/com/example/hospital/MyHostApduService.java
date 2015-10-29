@@ -1,9 +1,12 @@
 package com.example.hospital;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.nfc.cardemulation.HostApduService;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MyHostApduService extends HostApduService {
@@ -15,6 +18,9 @@ public class MyHostApduService extends HostApduService {
 	private String memberID;
 	private String imei;
 
+	private boolean reportToastControl=false;
+	private Toast reportToast;
+
 	private String division;
 	private String doctor;
 	private String year	;
@@ -22,7 +28,6 @@ public class MyHostApduService extends HostApduService {
 	private String day;
 	private String time;
 	private int num;
-
 
 	private void getMemberInfo() {
 
@@ -70,7 +75,7 @@ public class MyHostApduService extends HostApduService {
 			switch(Integer.parseInt(tempMessage[1]))
 			{
 				case 1:
-					Toast.makeText(getApplication(), "已報到", Toast.LENGTH_LONG).show();
+					showReportToast("已報到");
 					break;
 			}
 			return getNextMessage();
@@ -102,5 +107,14 @@ public class MyHostApduService extends HostApduService {
 		Log.i("HCEDEMO", "Deactivated: " + reason);
 	}
 
-
+	public void showReportToast(String text){
+		if(reportToast == null) {
+			reportToast = Toast.makeText(MyHostApduService.this, text, Toast.LENGTH_LONG);
+		} else {
+			reportToast.setText(text);
+			reportToast.setDuration(Toast.LENGTH_LONG);
+		}
+		reportToast.show();
+	}
 }
+
